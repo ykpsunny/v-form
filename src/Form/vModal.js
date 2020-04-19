@@ -2,7 +2,7 @@ import propTypes from "prop-types"
 
 import React from "react"
 
-function vModal(key) {
+function vModal(key, rules) {
 	return (Component) => {
     class HOC extends React.PureComponent {
 			static contextTypes = {
@@ -16,14 +16,12 @@ function vModal(key) {
         return React.cloneElement(children, {
           onChange: (e) => {
             modalChange(key, e.target.value)
-            if (typeof onChange === 'function') {
-              onChange(e)
-            }
+            onChange && onChange(e)
           },
           value: modal[key]
         })
       }
-		}
+    }
     return <HOC>{Component}</HOC>
   }
 }
