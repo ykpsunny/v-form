@@ -7,47 +7,44 @@ class Form extends React.PureComponent {
 		modal: propTypes.object,
 		modalChange: propTypes.func,
 	};
+
+	static defaultProps = {
+		onFieldsChange: (changedFields, allFields) => {}
+	}
+
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
-			modal: props.modal || {},
+			modal: {}
 		};
 	}
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.modal) {
-			this.setState({
-				modal: nextProps.modal,
-			});
-		}
-	}
-	modalChange = (name, value) => {
+
+	modalChange = (key, value) => {
 		const { onFieldsChange } = this.props;
 		this.setState(
 			{
 				modal: {
 					...this.state.modal,
-					[name]: value,
+					[key]: value,
 				},
 			},
 			() => {
-				onFieldsChange({ [name]: value }, this.state.modal);
+				onFieldsChange({ [key]: value }, this.state.modal);
 			}
 		);
 	};
+
 	getChildContext() {
 		return {
 			modalChange: this.modalChange,
 			modal: this.props.modal || this.state.modal,
 		};
 	}
+
 	render() {
-		return <div className="v-form">{this.props.children}</div>;
+		return <form className="v-form">{this.props.children}</form>;
 	}
 }
-
-Form.defaultProps = {
-	onFieldsChange: (changedFields, allFields) => {},
-};
 
 Form.propTypes = {
 	onFieldsChange: propTypes.func, // 当表单字段更新时触发的回调函数, 参数 changedFields, allFields
